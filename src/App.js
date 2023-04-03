@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Todo from './components/Todo';
 import Filter from './components/Filter';
 
@@ -7,6 +7,21 @@ export default function App() {
   const [filter, setFilter] = useState('All');
 
   const inputRef = useRef(null);
+
+  useEffect(() => {
+    const savedTodos = JSON.parse(localStorage.getItem('todos'));
+    console.log("current todos", savedTodos);
+    if (savedTodos !== null) {
+      setTodos(savedTodos);
+    } else {
+      setTodos([]);
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log("save Todos", todos);
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   function handleInput() {
     const nextList = [...todos.slice(), { title: inputRef.current.value, checked: false }];
